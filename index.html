@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marketing Dashboard</title>
+
+<style>
+/* === KEEPING YOUR ORIGINAL STYLES === */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1d1d1d;
+  color: white;
+  height: 100%;
+  overflow: hidden;
+}
+
+header {
+  height: 10vh;
+  background: url('header.png') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9vh;
+  font-weight: bold;
+}
+
+.category-bar, .table-row {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+}
+
+.category-bar { height: 7vh; background:red; font-weight:bold; }
+.table-row { height: 6.3vh; }
+.table-row.even { background:#848484; }
+.table-row.odd { background:#4f4f4f; }
+
+.col-number { width: 3%; }
+.col-project, .col-sub, .col-head { width: 10%; }
+.col-brand { width: 10%; text-align:center; }
+.col-start, .col-deadline { width: 10%; text-align:center; }
+.col-remarks { width:17%; word-break:break-word; }
+.col-accomplishment { width:10%; }
+.col-status { width:10%; }
+
+.brand-logo { height:5vh; display:block; margin:auto; }
+
+.content { height:63vh; overflow:hidden; }
+
+footer { height:20vh; display:flex; flex-direction:column; }
+
+.footer-top { height:12vh; background:white; }
+.footer-bottom { height:8vh; background:#e2cec3; }
+
+.headline-box {
+  width:100%;
+  height:8vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  white-space:nowrap;
+  font-size:2.5vh;
+  font-weight:bold;
+}
+
+.headline-text {
+  display:inline-block;
+  padding-left:100%;
+  color:black;
+}
+
+.scroll {
+  animation: tickerScroll 30s linear forwards;
+}
+
+@keyframes tickerScroll {
+  0% { transform:translateX(0%); }
+  100% { transform:translateX(-100%); }
+}
+</style>
+</head>
+
+<body>
+
+<header>MARKETING ONGOING PROJECTS</header>
+
+<div class="category-bar">
+  <div class="col-number"></div>
+  <div class="col-project">Project</div>
+  <div class="col-sub">Sub Department</div>
+  <div class="col-head">Project Head</div>
+  <div class="col-brand">Brand</div>
+  <div class="col-start">Date Started</div>
+  <div class="col-deadline">Deadline</div>
+  <div class="col-remarks">Remarks</div>
+  <div class="col-accomplishment">Accomplishment</div>
+  <div class="col-status">Status</div>
+</div>
+
+<div class="content" id="data-rows"></div>
+
+<footer>
+  <div class="footer-top">
+    <div id="pageSpace" style="display:flex;"></div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="headline-box">
+      <div class="headline-text" id="headline-text"></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+/* ================================
+   API CONFIG
+================================= */
+const API = {
+  headlines: "YOUR_HEADLINES_API_URL",
+  projects: "YOUR_PROJECTS_API_URL",
+  pages: "YOUR_FB_API_URL"
+};
+
+/* ================================
+   HEADLINES
+================================= */
+function loadHeadlines() {
+  fetch(API.headlines)
+    .then(res => res.json())
+    .then(data => {
+      const text = data.join("   •   ");
+      const el = document.getElementById("headline-text");
+      el.textContent = text;
+      startScrollLoop(el);
+    });
+}
+
+function startScrollLoop(el) {
+  function loop() {
+    el.classList.add("scroll");
+    setTimeout(() => {
+      el.classList.remove("scroll");
+      void el.offsetWidth;
+      setTimeout(loop, 500);
+    }, 30000);
+  }
+  loop();
+}
+
+/* ================================
+   PROJECTS
+================================= */
+let fullRows = [], rowPage = 0;
+
+function loadTasks() {
+  fetch(API.projects)
+    .then(res => res.json())
+    .then(data => {
+
+      fullRows = data.map((item, i) => {
+        const brand = item.brand.toLowerCase();
+
+        return `
+          <div class="table-row ${i%2===0?'even':'odd'}">
+            <div class="col-number">${i+1}</div>
+            <div class="col-project">${item.project}</div>
+            <div class="col-sub">${item.sub}</div>
+            <div class="col-head">${item.head}</div>
+            <div class="col-brand">
+              <img src="${brand}.svg" class="brand-logo">
+            </div>
+            <div class="col-start">${item.start}</div>
+            <div class="col-deadline">${item.deadline}</div>
+            <div class="col-remarks">${item.remarks}</div>
+            <div class="col-accomplishment">${item.accomplishment}%</div>
+            <div class="col-status">${item.status}</div>
+          </div>
+        `;
+      });
+
+      switchRows();
+      setInterval(switchRows, 30000);
+    });
+}
+
+function switchRows() {
+  const container = document.getElementById("data-rows");
+  container.innerHTML = fullRows.slice(rowPage*10, (rowPage+1)*10).join('');
+  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
+}
+
+/* ================================
+   PAGE SPACE (FB/IG)
+================================= */
+let pages = [];
+let pageIndex = 0;
+
+function loadPageSpace() {
+  fetch(API.pages)
+    .then(res => res.json())
+    .then(data => {
+
+      pages = Object.keys(data).map(brand => {
+        const val = Number(data[brand]).toLocaleString();
+
+        return `
+          <div style="width:20%;text-align:center;color:black;">
+            <img src="${brand}_on_white.svg" style="max-height:50px;"><br>
+            Followers: ${val}
+          </div>
+        `;
+      });
+
+      updatePageSpace();
+      setInterval(updatePageSpace, 10000);
+    });
+}
+
+function updatePageSpace() {
+  const container = document.getElementById("pageSpace");
+
+  const batch = pages.slice(pageIndex, pageIndex + 5);
+  container.innerHTML = batch.join('');
+
+  pageIndex += 5;
+  if (pageIndex >= pages.length) pageIndex = 0;
+}
+
+/* ================================
+   INIT
+================================= */
+loadHeadlines();
+loadTasks();
+loadPageSpace();
+
+</script>
+
+</body>
+</html>

@@ -515,12 +515,6 @@ function loadPageSpace() {
       const fbVal = Number(fbData[brand] || 0);
       const igVal = Number(igData[brand] || 0);
 
-      function getIndicator(val){
-       if(val > 0) return '<span style="color:green;">▲</span>';
-       if(val < 0) return '<span style="color:red;">▼</span>';
-       return '<span style="display:inline-block;width:12px;height:8px;background:black;border-radius:2px;"></span>';
-      }
-
       function getIndicator(diff){
         if(diff > 0) return '<span style="color:green;">▲</span>';
         if(diff < 0) return '<span style="color:red;">▼</span>';
@@ -534,10 +528,10 @@ function loadPageSpace() {
           </div>
           <div class="white-ticker-item-right">
             <div style="color:black;font-weight:bold;">
-              FB: ${fbVal} ${getIndicator(fbDiff)}
+              FB: ${fbVal.value} ${getIndicator(fbVal.difference)}
             </div>
             <div style="color:black;font-weight:bold;">
-              IG: ${igVal} ${getIndicator(igDiff)}
+              IG: ${igVal.value} ${getIndicator(igVal.difference)}
             </div>
           </div>
         </div>

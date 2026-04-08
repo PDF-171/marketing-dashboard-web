@@ -508,43 +508,41 @@ function loadPageSpace() {
   ])
   .then(([fbData, igData]) => {
 
-const fbRows = Array.isArray(fbData) ? fbData : Object.values(fbData);
-const igRows = Array.isArray(igData) ? igData : Object.values(igData);
+    const brands = Object.keys(fbData);
 
-pages = fbRows.map(fb => {
+    pages = brands.map(brand => {
 
-  const brand = fb.brand?.toLowerCase();
+      const fbVal = Number(fbData[brand] || 0);
+      const igVal = Number(igData[brand] || 0);
 
-  const ig = igRows.find(x => x.brand?.toLowerCase() === brand) || {};
+      function getIndicator(val){
+       if(val > 0) return '<span style="color:green;">▲</span>';
+       if(val < 0) return '<span style="color:red;">▼</span>';
+       return '<span style="display:inline-block;width:12px;height:8px;background:black;border-radius:2px;"></span>';
+      }
 
-  const fbVal = Number(fb.new || 0).toLocaleString();
-  const igVal = Number(ig.new || 0).toLocaleString();
+      function getIndicator(diff){
+        if(diff > 0) return '<span style="color:green;">▲</span>';
+        if(diff < 0) return '<span style="color:red;">▼</span>';
+        return '<span style="display:inline-block;width:12px;height:8px;background:black;border-radius:2px;"></span>';
+      }
 
-  const fbDiff = Number(fb.difference || 0);
-  const igDiff = Number(ig.difference || 0);
-
-  function getIndicator(diff){
-    if(diff > 0) return '<span style="color:green;">▲</span>';
-    if(diff < 0) return '<span style="color:red;">▼</span>';
-    return '<span style="display:inline-block;width:12px;height:8px;background:black;border-radius:2px;"></span>';
-  }
-
-  return `
-    <div class="white-ticker-item">
-      <div class="white-ticker-item-left">
-        <img src="brands/${brand}_on_white.svg" class="ticker-brand-logo">
-      </div>
-      <div class="white-ticker-item-right">
-        <div style="color:black;font-weight:bold;">
-          FB: ${fbVal} ${getIndicator(fbDiff)}
+      return `
+        <div class="white-ticker-item">
+          <div class="white-ticker-item-left">
+            <img src="brands/${brand.toLowerCase()}_on_white.svg" class="ticker-brand-logo">
+          </div>
+          <div class="white-ticker-item-right">
+            <div style="color:black;font-weight:bold;">
+              FB: ${fbVal} ${getIndicator(fbDiff)}
+            </div>
+            <div style="color:black;font-weight:bold;">
+              IG: ${igVal} ${getIndicator(igDiff)}
+            </div>
+          </div>
         </div>
-        <div style="color:black;font-weight:bold;">
-          IG: ${igVal} ${getIndicator(igDiff)}
-        </div>
-      </div>
-    </div>
-  `;
-});
+      `;
+    });
 
     updatePageSpace();
     setInterval(updatePageSpace, 10000);

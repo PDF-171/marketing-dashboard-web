@@ -567,7 +567,21 @@ function updatePageSpace() {
    INIT (UNCHANGED)
 ================================= */
 loadHeadlines();
+loadTasks();
 loadPageSpace();
+
+function loadTasks() {
+  fetch(API.tasks)
+    .then(res => res.json())
+    .then(data => {
+      fullRows = Array.isArray(data) ? data : Object.values(data);
+
+      rowPage = 0;
+      switchRows(); // FIRST RENDER
+
+      setInterval(switchRows, 5000); // AUTO ROTATE PAGES
+    });
+}
 
 /* ================================
    DATE & TIME

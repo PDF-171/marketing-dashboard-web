@@ -498,8 +498,8 @@ container.innerHTML = pageRows.map((item, i) => {
         <img src="brands/${brand}.svg" class="brand-logo">
       </div>
 
-      <div class="col-start">${item.start || ''}</div>
-      <div class="col-deadline">${item.deadline || ''}</div>
+      <div class="col-start">${formatDate(item.start)}</div>
+<div class="col-deadline">${formatDate(item.deadline)}</div>
       <div class="col-remarks">${item.remarks || ''}</div>
 
       <div class="col-accomplishment">
@@ -673,6 +673,25 @@ function getProgressColor(percent) {
 
   // 100: green
   return "rgb(0,200,0)";
+}
+
+  function formatDate(dateStr) {
+  if (!dateStr) return "";
+
+  const date = new Date(dateStr);
+
+  if (isNaN(date)) return dateStr; // fallback if already formatted
+
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December"
+  ];
+
+  const month = months[date.getMonth()];
+  const day = String(date.getDate()).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${month} ${day}, ${year}`;
 }
 
 </script>

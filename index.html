@@ -89,15 +89,7 @@
   width: 0%;
   border-radius: 6px;
   transition: width 0.5s ease;
-  
-  /* gradient from red → yellow → green */
-  background: linear-gradient(
-    90deg,
-    #ff3b3b 0%,
-    #ffcc00 50%,
-    #3ddc84 100%
-  );
-}
+  }
 
 
     .progress-segment {
@@ -472,6 +464,8 @@ function loadTasks() {
         const brand = (item.brand || "").toLowerCase();
         const accomplishment = item.accomplishment || 0;
 
+        const color = getProgressColor(accomplishment);
+
         return `
           <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
             <div class="col-number">${i + 1}</div>
@@ -490,7 +484,9 @@ function loadTasks() {
             <div class="col-accomplishment">
               <div>${accomplishment}%</div>
               <div class="progress-container">
-                <div class="progress-bar" style="width:${accomplishment}%"></div>
+                <div class="progress-bar"
+                     style="width:${accomplishment}%; background:${color}">
+                </div>
               </div>
             </div>
 
@@ -621,6 +617,39 @@ function updateDateTime() {
 // run immediately + every second
 updateDateTime();
 setInterval(updateDateTime, 1000);
+
+function getProgressColor(percent) {
+  percent = Math.max(0, Math.min(100, percent));
+
+  // 0–1: red
+  if (percent <= 1) return "rgb(255,0,0)";
+
+  // 2–49: stepped red → yellow
+  if (percent < 50) {
+    const t = (percent - 2) / (49 - 2);
+    const g = Math.round(255 * t);
+
+    // add slight stepping effect
+    const step = Math.round(t * 20) / 20;
+    return `rgb(255, ${Math.round(255 * step)}, 0)`;
+  }
+
+  // 50: yellow
+  if (percent === 50) return "rgb(255,255,0)";
+
+  // 51–99: yellow → green (stepped)
+  if (percent < 100) {
+    const t = (percent - 51) / (99 - 51);
+
+    const step = Math.round(t * 20) / 20;
+    const r = Math.round(255 * (1 - step));
+
+    return `rgb(${r},255,0)`;
+  }
+
+  // 100: green
+  return "rgb(0,200,0)";
+}
 
 </script>
 </body>

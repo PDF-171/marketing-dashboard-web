@@ -80,11 +80,24 @@
       height: 40px;
       background-color: #333;
       border-radius: 6px;
-      display: flex;
-      gap: 4px;
-      padding: 4px;
-      box-sizing: border-box;
+      overflow: hidden;
+      position: relative;
     }
+
+    .progress-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 6px;
+  transition: width 0.5s ease;
+  
+  /* gradient from red → yellow → green */
+  background: linear-gradient(
+    90deg,
+    #ff3b3b 0%,
+    #ffcc00 50%,
+    #3ddc84 100%
+  );
+}
 
 
     .progress-segment {
@@ -477,10 +490,7 @@ function loadTasks() {
             <div class="col-accomplishment">
               <div>${accomplishment}%</div>
               <div class="progress-container">
-                <div class="progress-segment"></div>
-                <div class="progress-segment"></div>
-                <div class="progress-segment"></div>
-                <div class="progress-segment"></div>
+                <div class="progress-bar" style="width:${accomplishment}%"></div>
               </div>
             </div>
 

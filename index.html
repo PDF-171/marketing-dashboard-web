@@ -25,6 +25,7 @@ header {
   justify-content: center;
   font-size: 9vh;
   font-weight: bold;
+  color: white;
 }
 
 .category-bar, .table-row {
@@ -33,28 +34,252 @@ header {
   padding: 0 0.5rem;
 }
 
-.category-bar { height: 7vh; background:red; font-weight:bold; }
-.table-row { height: 6.3vh; }
-.table-row.even { background:#848484; }
-.table-row.odd { background:#4f4f4f; }
+.category-bar { 
+  height: 7vh; 
+  background:red; 
+  font-weight:bold; 
+}
+  
+.table-row { 
+  height: 6.3vh; 
+}
+  
+.table-row.even { 
+  background:#848484; 
+}
+  
+.table-row.odd { 
+  background:#4f4f4f; 
+}
+
+.table-row div hover, .category-bar div hover {
+  padding: 0 0.5rem;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: unset;
+}
 
 .col-number { width: 3%; }
 .col-project, .col-sub, .col-head { width: 10%; }
 .col-brand { width: 10%; text-align:center; }
 .col-start, .col-deadline { width: 10%; text-align:center; }
-.col-remarks { width:17%; word-break:break-word; }
+  
+.col-remarks { 
+  width:17%; 
+  whitespace: normal;
+  overflow-wrap: break-word;
+  word-break:break-word; 
+  line-height: 1.4 rem;
+  text-overflow: unset;
+}
 .col-accomplishment { width:10%; }
 .col-status { width:10%; }
 
-.brand-logo { height:5vh; display:block; margin:auto; }
+.progress-segment {
+      flex: 1;
+      border-radius: 4px;
+      opacity: 0.2;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.3s ease, background-color 0.3 ease;
+    }
+  
+.progress-segment::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 200%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.3) 0 10px,
+        transparent 10px 20px
+      );
+      animation: flow 2s linear infinite;
+    }
+@keyframes flow {
+      100% {left: 0;}
+    }
+.progress-container.full {
+      box-shadow: 0 0 20px 5px #6ccf3c inset, 0 0 15px #6ccf3c;
+    }
+
+.progress-segment.active {
+      opacity: 1;
+    }  
+
+.brand-logo { 
+  height:5vh; 
+  max-width: 100%;
+  object-fit: contain;
+  display: block;
+  margin:0 auto; }
 
 .content { height:63vh; overflow:hidden; }
 
-footer { height:20vh; display:flex; flex-direction:column; }
+footer { 
+  height:20vh;
+  width:100%;
+  display:flex; 
+  flex-direction:column; 
+}
 
-.footer-top { height:12vh; background:white; }
-.footer-bottom { height:8vh; background:#e2cec3; }
+.footer-top { 
+  height:12vh; 
+  background:white;
+  width:100%;
+}
+  
+.footer-bottom { 
+  height:8vh; 
+  background:#e2cec3;
+  width:100%;
+}
 
+.footer-logo {
+  position: absolute;
+      left: 0rem;
+      top:80%;
+      transform: translateY(0);
+      height: 20vh;
+      width: auto;
+}
+
+.name-time-box {
+      position: absolute;
+      z-index: 1;
+      right:0rem;
+      top:80%;
+      height: 20vh;
+      width: 20vh;
+      background-color: red;
+    }
+
+.week-box {
+      position: absolute;
+      bottom:15vh;
+      right:0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+#week-text {
+      font-size: 3vh;
+      font-weight: bold;
+      height: 4vh;
+      width: auto;
+      color: white
+    }
+
+.date-box {
+      position: absolute;
+      bottom:10vh;
+      right:0rem;
+      width: 20vh;  
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+#date-text {
+      font-size: 3vh;
+      font-weight: 550;
+      height: 3vh;
+      width: auto;
+      color: white
+    }
+
+.year-box {
+      position: absolute;
+      bottom: 5vh;
+      right:0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  
+#year-text {
+      font-size: 3vh;
+      font-weight: 600;
+      height: 3vh;
+      width: auto;
+      color: white;
+    }
+
+.time-box {
+      position: absolute;
+      bottom: 0vh;
+      right: 0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+#time-text {
+      font-size: 3vh;
+      height: 4vh;
+      width: auto;
+      color: white;
+      font-weight: 500;
+    }
+
+.custom-box {
+      position: absolute;
+      top: 80vh;
+      right: 12rem;
+      width: 71.17%;
+      height: 12vh;
+      background-color: white;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 1s ease-in-out;
+    }
+  
+.white-ticker-item {
+      width: 20%;
+      display: flex;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0 1vh
+    }
+
+.white-ticker-item-left img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      aspect-ratio: 1 / 1;
+    }
+
+.white-ticker-item-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-left: 1vh; /* adds space from the logo */
+      text-align: center;
+    }
+
+.ticker-brand-logo {
+      max-width: 30%;
+      max-height: 80%;
+      min-height: 30%;
+      object-fit: contain;
+      vertical-align: middle;
+      margin: 0 6px;
+    }
+  
 .headline-box {
   width:100%;
   height:8vh;
@@ -72,6 +297,12 @@ footer { height:20vh; display:flex; flex-direction:column; }
   color:black;
 }
 
+.headline-text-wrapper {
+      display: inline-block;
+      padding-left: 100%;
+      white-space: nowrap;
+    }
+
 .scroll {
   animation: tickerScroll 30s linear forwards;
 }
@@ -80,6 +311,14 @@ footer { height:20vh; display:flex; flex-direction:column; }
   0% { transform:translateX(0%); }
   100% { transform:translateX(-100%); }
 }
+
+.col-project {
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-wrap: break-word;  
+    }
+
+audio { display: none; }
 </style>
 </head>
 
@@ -120,7 +359,7 @@ footer { height:20vh; display:flex; flex-direction:column; }
    API CONFIG
 ================================= */
 const API = {
-  headlines: "YOUR_HEADLINES_API_URL",
+  headlines: "https://script.google.com/macros/s/AKfycbyiUmwPn3edhoWsnv8PT8Z5sZcEY6xBZtRhEKDtUYzKGqfpUFAlWSVW7hlqJTxup9NO/exec",
   projects: "YOUR_PROJECTS_API_URL",
   pages: "YOUR_FB_API_URL"
 };

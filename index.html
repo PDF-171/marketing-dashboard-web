@@ -515,11 +515,12 @@ function loadPageSpace() {
       const fb = fbData[brand] || {};
       const ig = igData[brand] || {};
 
-      const fbVal = Number(fb.value || fb).toLocaleString();
-      const igVal = Number(ig.value || ig).toLocaleString();
+const fbVal = Number(fb.new || 0).toLocaleString();
+const igVal = Number(ig.new || 0).toLocaleString();
 
-      const fbDiff = Number(fb.diff || 0);
-      const igDiff = Number(ig.diff || 0);
+const fbDiff = Number(fb.difference || 0);
+const igDiff = Number(ig.difference || 0);
+
 
       function getIndicator(diff){
         if(diff > 0) return '<span style="color:green;">▲</span>';
@@ -536,7 +537,7 @@ function loadPageSpace() {
             <div style="color:black;font-weight:bold;">
               FB: ${fbVal} ${getIndicator(fbDiff)}
             </div>
-            <div style="color:black;">
+            <div style="color:black;font-weight:bold;">
               IG: ${igVal} ${getIndicator(igDiff)}
             </div>
           </div>

@@ -457,42 +457,64 @@ function switchRows() {
 
   const start = rowPage * 10;
   const pageRows = fullRows.slice(start, start + 10);
+  while (pageRows.length < 10) {
+  pageRows.push(null)
+  }
 
-  container.innerHTML = pageRows.map((item, i) => {
+container.innerHTML = pageRows.map((item, i) => {
 
-    const globalIndex = start + i;
-    const brand = (item.brand || "").toLowerCase();
-    const accomplishment = item.accomplishment || 0;
-    const color = getProgressColor(accomplishment);
+  const globalIndex = start + i;
 
+  // EMPTY ROW HANDLER
+  if (!item) {
     return `
       <div class="table-row ${globalIndex % 2 === 0 ? 'even' : 'odd'}">
-        <div class="col-number">${globalIndex + 1}</div>
-        <div class="col-project">${item.project || ''}</div>
-        <div class="col-sub">${item.sub || ''}</div>
-        <div class="col-head">${item.head || ''}</div>
-
-        <div class="col-brand">
-          <img src="brands/${brand}.svg" class="brand-logo">
-        </div>
-
-        <div class="col-start">${item.start || ''}</div>
-        <div class="col-deadline">${item.deadline || ''}</div>
-        <div class="col-remarks">${item.remarks || ''}</div>
-
-        <div class="col-accomplishment">
-          <div>${accomplishment}%</div>
-          <div class="progress-container">
-            <div class="progress-bar"
-              style="width:${accomplishment}%; background:${color}">
-            </div>
-          </div>
-        </div>
-
-        <div class="col-status">${item.status || ''}</div>
+        <div class="col-number"></div>
+        <div class="col-project"></div>
+        <div class="col-sub"></div>
+        <div class="col-head"></div>
+        <div class="col-brand"></div>
+        <div class="col-start"></div>
+        <div class="col-deadline"></div>
+        <div class="col-remarks"></div>
+        <div class="col-accomplishment"></div>
+        <div class="col-status"></div>
       </div>
     `;
-  }).join('');
+  }
+
+  const brand = (item.brand || "").toLowerCase();
+  const accomplishment = item.accomplishment || 0;
+  const color = getProgressColor(accomplishment);
+
+  return `
+    <div class="table-row ${globalIndex % 2 === 0 ? 'even' : 'odd'}">
+      <div class="col-number">${globalIndex + 1}</div>
+      <div class="col-project">${item.project || ''}</div>
+      <div class="col-sub">${item.sub || ''}</div>
+      <div class="col-head">${item.head || ''}</div>
+
+      <div class="col-brand">
+        <img src="brands/${brand}.svg" class="brand-logo">
+      </div>
+
+      <div class="col-start">${item.start || ''}</div>
+      <div class="col-deadline">${item.deadline || ''}</div>
+      <div class="col-remarks">${item.remarks || ''}</div>
+
+      <div class="col-accomplishment">
+        <div>${accomplishment}%</div>
+        <div class="progress-container">
+          <div class="progress-bar"
+            style="width:${accomplishment}%; background:${color}">
+          </div>
+        </div>
+      </div>
+
+      <div class="col-status">${item.status || ''}</div>
+    </div>
+  `;
+}).join('');
 
   rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
 }

@@ -79,7 +79,6 @@ body {
 
 <script>
 
-// ================= API =================
 const API = {
   headlines: "https://script.google.com/macros/s/AKfycbyiUmwPn3edhoWsnv8PT8Z5sZcEY6xBZtRhEKDtUYzKGqfpUFAlWSVW7hlqJTxup9NO/exec",
   projects: "https://script.google.com/macros/s/AKfycbxxaAX2ct3FWRAEuuo26IjzU8xnGxg722zgKc8qSAusRxVlahr2iqnPIew3Vmb_CNFZ/exec",
@@ -87,96 +86,165 @@ const API = {
   ig: "https://script.google.com/macros/s/AKfycbxdDKlonWwGZjMa79QLOjPqJuU4ivXuxisU4LBHzPjLc0Atw6nuVyX_CQNXSrrHkUP8TA/exec"
 };
 
-// ================= HEADLINES =================
-function loadHeadlines(){
+//////////////////////////////////////////////////
+// HEADLINES
+//////////////////////////////////////////////////
+function loadHeadlines() {
   fetch(API.headlines)
-    .then(res=>res.json())
-    .then(data=>{
-      const text = (Array.isArray(data)?data:Object.values(data)).join(" • ");
-      document.getElementById("headline-text").textContent = text;
+    .then(res => res.json())
+    .then(data => {
+      const lines = Array.isArray(data) ? data : Object.values(data);
+      const text = lines.join("   •   ");
+
+      const el = document.getElementById("headline-text");
+      el.textContent = text;
+
+      startScrollLoop(el);
     });
 }
 
-// ================= PROJECTS =================
-let rows=[], page=0;
+function startScrollLoop(el) {
+  function loop() {
+    el.classList.add("scroll");
 
-function loadProjects(){
+    setTimeout(() => {
+      el.classList.remove("scroll");
+      void el.offsetWidth;
+      setTimeout(loop, 500);
+    }, 30000);
+  }
+  loop();
+}
+
+//////////////////////////////////////////////////
+// PROJECTS
+//////////////////////////////////////////////////
+let fullRows = [];
+let rowPage = 0;
+
+function loadTasks() {
   fetch(API.projects)
-    .then(res=>res.json())
-    .then(data=>{
+    .then(res => res.json())
+    .then(data => {
 
-      const list = Array.isArray(data)?data:Object.values(data);
+      const rows = Array.isArray(data) ? data : Object.values(data);
 
-      rows = list.map((item,i)=>`
-        <div class="table-row ${i%2===0?'even':'odd'}">
-          <div class="col-number">${i+1}</div>
-          <div class="col-project">${item.project}</div>
-          <div class="col-sub">${item.sub}</div>
-          <div class="col-head">${item.head}</div>
-          <div class="col-brand">
-            <img src="brands/${(item.brand||'').toLowerCase()}.svg" class="brand-logo">
+      fullRows = rows.map((item, i) => {
+        const brand = (item.brand || "").toLowerCase();
+
+        return `
+          <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
+            <div class="col-number">${i + 1}</div>
+            <div class="col-project">${item.project || ""}</div>
+            <div class="col-sub">${item.sub || ""}</div>
+            <div class="col-head">${item.head || ""}</div>
+            <div class="col-brand">
+              <img src="brands/${brand}.svg" class="brand-logo">
+            </div>
+            <div class="col-start">${item.start || ""}</div>
+            <div class="col-deadline">${item.deadline || ""}</div>
+            <div class="col-remarks">${item.remarks || ""}</div>
+            <div class="col-accomplishment">${item.accomplishment || 0}%</div>
+            <div class="col-status">${item.status || ""}</div>
           </div>
-          <div class="col-start">${item.start}</div>
-          <div class="col-deadline">${item.deadline}</div>
-          <div class="col-remarks">${item.remarks}</div>
-          <div class="col-accomplishment">${item.accomplishment}%</div>
-          <div class="col-status">${item.status}</div>
-        </div>
-      `);
+        `;
+      });
 
-      showPage();
-      setInterval(showPage,30000);
+      switchRows();
+      setInterval(switchRows, 30000);
     });
 }
 
-function showPage(){
-  const el = document.getElementById("data-rows");
-  el.innerHTML = rows.slice(page*10,(page+1)*10).join("");
-  page = (page+1)%Math.ceil(rows.length/10);
+function switchRows() {
+  const container = document.getElementById("data-rows");
+
+  if (!fullRows.length) return;
+
+  container.innerHTML = fullRows.slice(rowPage * 10, (rowPage + 1) * 10).join('');
+  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
 }
 
-// ================= FB + IG =================
-let pages=[], pIndex=0;
+//////////////////////////////////////////////////
+// PAGE SPACE (FB + IG)
+//////////////////////////////////////////////////
+let pages = [];
+let pageIndex = 0;
 
-function loadPages(){
+function loadPageSpace() {
+
   Promise.all([
-    fetch(API.fb).then(r=>r.json()),
-    fetch(API.ig).then(r=>r.json())
+    fetch(API.fb).then(res => res.json()),
+    fetch(API.ig).then(res => res.json())
   ])
-  .then(([fb,ig])=>{
+  .then(([fbData, igData]) => {
 
-    pages = Object.keys(fb).map(brand=>`
-      <div style="width:20%;text-align:center;">
-        <img src="brands/${brand}_on_white.svg" height="40"><br>
-        FB: ${Number(fb[brand]).toLocaleString()}<br>
-        IG: ${Number(ig[brand]||0).toLocaleString()}
-      </div>
-    `);
+    pages = Object.keys(fbData).map(brand => {
 
-    updatePages();
-    setInterval(updatePages,10000);
+      const fb = Number(fbData[brand] || 0).toLocaleString();
+      const ig = Number(igData[brand] || 0).toLocaleString();
+
+      return `
+        <div style="width:20%;text-align:center;color:black;">
+          <img src="brands/${brand}_on_white.svg" style="max-height:50px;"><br>
+          FB: ${fb}<br>
+          IG: ${ig}
+        </div>
+      `;
+    });
+
+    updatePageSpace();
+    setInterval(updatePageSpace, 10000);
+
   });
 }
 
-function updatePages(){
-  document.getElementById("pageSpace").innerHTML =
-    pages.slice(pIndex,pIndex+5).join("");
-  pIndex=(pIndex+5)%pages.length;
+function updatePageSpace() {
+  const container = document.getElementById("pageSpace");
+
+  if (!pages.length) return;
+
+  const batch = pages.slice(pageIndex, pageIndex + 5);
+  container.innerHTML = batch.join('');
+
+  pageIndex += 5;
+  if (pageIndex >= pages.length) pageIndex = 0;
 }
 
-// ================= TIME =================
-function updateTime(){
-  const n=new Date();
-  document.getElementById("time-text").textContent =
-    n.toLocaleString();
-}
-setInterval(updateTime,1000);
+//////////////////////////////////////////////////
+// TIME
+//////////////////////////////////////////////////
+function updateDateTime() {
+  const now = new Date();
 
-// ================= INIT =================
+  document.getElementById('week-text').textContent =
+    now.toLocaleDateString('en-US', { weekday: 'long' });
+
+  document.getElementById('date-text').textContent =
+    now.toLocaleDateString('en-US', { month: 'long', day: '2-digit' });
+
+  document.getElementById('year-text').textContent =
+    now.getFullYear();
+
+  let hours = now.getHours();
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12 || 12;
+
+  document.getElementById('time-text').textContent =
+    `${hours}:${minutes}:${seconds} ${ampm}`;
+}
+
+//////////////////////////////////////////////////
+// INIT
+//////////////////////////////////////////////////
 loadHeadlines();
-loadProjects();
-loadPages();
-updateTime();
+loadTasks();
+loadPageSpace();
+
+updateDateTime();
+setInterval(updateDateTime, 1000);
 
 </script>
 

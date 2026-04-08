@@ -1,151 +1,468 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marketing Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Marketing Dashboard</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1d1d1d;
+      color: white;
+      height: 100%;
+      overflow: hidden;
+    }
 
-<style>
-/* KEEP YOUR STYLE (shortened here for clarity) */
-body {
-  margin:0;
-  font-family:Arial;
-  background:#1d1d1d;
-  color:white;
-}
+    header {
+      height: 10vh;
+      background: url('header.png') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9vh;
+      font-weight: bold;
+      color: white;
+    }
 
-.category-bar { background:red; font-weight:bold; display:flex; }
-.table-row { display:flex; }
-.table-row.even { background:#848484; }
-.table-row.odd { background:#4f4f4f; }
+    .category-bar, .table-row {
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+    }
 
-.col-number{width:3%}
-.col-project,.col-sub,.col-head{width:10%}
-.col-brand{width:10%;text-align:center}
-.col-start,.col-deadline{width:10%;text-align:center}
-.col-remarks{width:17%}
-.col-accomplishment{width:10%}
-.col-status{width:10%}
+    .category-bar {
+      height: 7vh;
+    }
 
-.brand-logo{height:40px}
+    .table-row {
+      height: 6.3vh;
+    }
 
-.headline-box{
-  height:40px;
-  background:#e2cec3;
-  overflow:hidden;
-}
+    .category-bar {
+      background-color: red;
+      font-weight: bold;
+    }
 
-.headline-text{
-  white-space:nowrap;
-  display:inline-block;
-  padding-left:100%;
-  animation: scroll 30s linear infinite;
-  color:black;
-}
+    .table-row.even { background-color: #848484; }
+    .table-row.odd { background-color: #4f4f4f; }
 
-@keyframes scroll{
-  from{transform:translateX(0)}
-  to{transform:translateX(-100%)}
-}
-</style>
+
+    .table-row div hover, .category-bar div hover {
+      padding: 0 0.5rem;
+      overflow: visible;
+      white-space: normal;
+      text-overflow: unset;
+    }
+
+    .col-number { width: 3%; }
+    .col-project, .col-sub, .col-head { width: 10%; }
+    .col-brand { width: 10%; text-align: center; }
+    .col-start, .col-deadline { width: 10%; text-align: center; }
+
+    .col-remarks {
+      width: 17%;
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-break: break-word;
+      line-height: 1.4em;
+      text-overflow: unset;
+    }
+
+    .col-accomplishment { width: 10%; }
+    .col-status { width: 10%; }
+
+    .progress-container {
+      width: 80%;
+      height: 40px;
+      background-color: #333;
+      border-radius: 6px;
+      display: flex;
+      gap: 4px;
+      padding: 4px;
+      box-sizing: border-box;
+    }
+
+
+    .progress-segment {
+      flex: 1;
+      border-radius: 4px;
+      opacity: 0.2;
+      position: relative;
+      overflow: hidden;
+      transition: opacity 0.3s ease, background-color 0.3 ease;
+    }
+
+    .progress-segment::before {
+      content: "";
+      position: absolute;
+      top: 0; left: -100%;
+      width: 200%;
+      height: 100%;
+      background: repeating-linear-gradient(
+        45deg,
+        rgba(255,255,255,0.3) 0 10px,
+        transparent 10px 20px
+      );
+      animation: flow 2s linear infinite;
+    }
+
+    @keyframes flow {
+      100% {left: 0;}
+    }
+
+    .progress-container.full {
+      box-shadow: 0 0 20px 5px #6ccf3c inset, 0 0 15px #6ccf3c;
+    }
+
+    .progress-segment.active {
+      opacity: 1;
+    }
+
+
+    .brand-logo {
+      height: 5vh;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .content {
+      height: 63vh;
+      overflow: hidden;
+    }
+
+    footer {
+      height: 20vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .footer-top {
+      height: 12vh;
+      background-color: white;
+      width: 100%;
+    }
+
+    .footer-bottom {
+      height: 8vh;
+      background-color: #e2cec3;
+      width: 100%;
+    }
+
+    .footer-logo {
+      position: absolute;
+      left: 0rem;
+      top:80%;
+      transform: translateY(0);
+      height: 20vh;
+      width: auto;
+    }
+
+    .name-time-box {
+      position: absolute;
+      z-index: 1;
+      right:0rem;
+      top:80%;
+      height: 20vh;
+      width: 20vh;
+      background-color: red;
+    }
+
+    .week-box {
+      position: absolute;
+      bottom:15vh;
+      right:0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #week-text {
+      font-size: 3vh;
+      font-weight: bold;
+      height: 4vh;
+      width: auto;
+      color: white
+    }
+
+    .date-box {
+      position: absolute;
+      bottom:10vh;
+      right:0rem;
+      width: 20vh;  
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #date-text {
+      font-size: 3vh;
+      font-weight: 550;
+      height: 3vh;
+      width: auto;
+      color: white
+    }
+
+    .year-box {
+      position: absolute;
+      bottom: 5vh;
+      right:0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #year-text {
+      font-size: 3vh;
+      font-weight: 600;
+      height: 3vh;
+      width: auto;
+      color: white;
+    }
+
+    .time-box {
+      position: absolute;
+      bottom: 0vh;
+      right: 0rem;
+      width: 20vh;
+      height: 5vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #time-text {
+      font-size: 3vh;
+      height: 4vh;
+      width: auto;
+      color: white;
+      font-weight: 500;
+    }
+
+    .custom-box {
+      position: absolute;
+      top: 80vh;
+      right: 12rem;
+      width: 71.17%;
+      height: 12vh;
+      background-color: white;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .white-ticker-item {
+      width: 20%;
+      display: flex;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 0 1vh
+    }
+
+    .white-ticker-item-left img {
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      aspect-ratio: 1 / 1;
+    }
+
+    .white-ticker-item-right {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      margin-left: 1vh; /* adds space from the logo */
+      text-align: center;
+    }
+
+    .ticker-brand-logo {
+      max-width: 30%;
+      max-height: 80%;
+      min-height: 30%;
+      object-fit: contain;
+      vertical-align: middle;
+      margin: 0 6px;
+    }
+
+    .headline-box {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 8vh;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 2.5vh;
+        font-weight: bold;
+        z-index: 0;
+      }
+
+      .headline-text {
+        display: inline-block;
+        padding-left: 100%;
+        color: black;
+        white-space: nowrap;
+      }
+
+      .headline-text-wrapper {
+      display: inline-block;
+      padding-left: 100%;
+      white-space: nowrap;
+    }
+
+    .scroll {
+      animation: tickerScroll 30s linear forwards;
+    }
+
+    @keyframes tickerScroll {
+      0%   { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .col-project {
+      white-space: normal;
+      overflow-wrap: break-word;
+      word-wrap: break-word;  
+    }
+
+
+    audio { display: none; }
+  </style>
 </head>
-
 <body>
+  <header>MARKETING ONGOING PROJECTS</header>
 
-<h1 style="text-align:center;">MARKETING ONGOING PROJECTS</h1>
+  <div class="category-bar">
+    <div class="col-number"></div>
+    <div class="col-project">Project</div>
+    <div class="col-sub">Sub Department</div>
+    <div class="col-head">Project Head</div>
+    <div class="col-brand">Brand</div>
+    <div class="col-start">Date Started</div>
+    <div class="col-deadline">Deadline</div>
+    <div class="col-remarks">Remarks</div>
+    <div class="col-accomplishment">Accomplishment</div>
+    <div class="col-status">Status</div>
+  </div>
 
-<div class="category-bar">
-  <div class="col-number"></div>
-  <div class="col-project">Project</div>
-  <div class="col-sub">Sub</div>
-  <div class="col-head">Head</div>
-  <div class="col-brand">Brand</div>
-  <div class="col-start">Start</div>
-  <div class="col-deadline">Deadline</div>
-  <div class="col-remarks">Remarks</div>
-  <div class="col-accomplishment">%</div>
-  <div class="col-status">Status</div>
-</div>
+  <div class="content" id="data-rows"></div>
 
-<div id="data-rows"></div>
+  <footer>
+    <div class="footer-top">
+      <div class="custom-box" id="pageSpace" style="display:flex;"></div>
+    </div>
 
-<div id="pageSpace" style="background:white;color:black;display:flex;"></div>
+    <div class="footer-bottom">
+      <div class="headline-box">
+        <div class="headline-text" id="headline-text"></div>
+      </div>
+    </div> 
 
-<div class="headline-box">
-  <div id="headline-text" class="headline-text"></div>
-</div>
+    <div class="name-time-box">
+      <div class="week-box">
+        <div id="week-text"></div>
+      </div>
+      <div class="date-box">
+        <div id="date-text"></div>
+      </div>
+      <div class="year-box">
+        <div id="year-text"></div>
+      </div>
+      <div class="time-box">
+        <div id="time-text"></div>
+      </div>
+    </div>
 
-<div id="time-text"></div>
+    <img src="logo.png" alt="Logo" class="footer-logo">
+  </footer>
+
+  <audio id="bg-music" src="startup.mp3" autoplay loop preload="auto"></audio>
 
 <script>
 
+/* ================================
+   API (REPLACES CSV)
+================================= */
 const API = {
   headlines: "https://script.google.com/macros/s/AKfycbyiUmwPn3edhoWsnv8PT8Z5sZcEY6xBZtRhEKDtUYzKGqfpUFAlWSVW7hlqJTxup9NO/exec",
-  projects: "https://script.google.com/macros/s/AKfycbxxaAX2ct3FWRAEuuo26IjzU8xnGxg722zgKc8qSAusRxVlahr2iqnPIew3Vmb_CNFZ/exec",
+  tasks: "https://script.google.com/macros/s/AKfycbxxaAX2ct3FWRAEuuo26IjzU8xnGxg722zgKc8qSAusRxVlahr2iqnPIew3Vmb_CNFZ/exec",
   fb: "https://script.google.com/macros/s/AKfycbw3bghTjbFKs4B3Dm6H7_DBMbFw3-o1yPnqRVQGkJv2a_vZ8nAeJAu1bxgEM4EhPqdMyA/exec",
   ig: "https://script.google.com/macros/s/AKfycbxdDKlonWwGZjMa79QLOjPqJuU4ivXuxisU4LBHzPjLc0Atw6nuVyX_CQNXSrrHkUP8TA/exec"
 };
 
-//////////////////////////////////////////////////
-// HEADLINES
-//////////////////////////////////////////////////
+/* ================================
+   HEADLINES (FROM GSHEET)
+================================= */
 function loadHeadlines() {
   fetch(API.headlines)
     .then(res => res.json())
     .then(data => {
       const lines = Array.isArray(data) ? data : Object.values(data);
-      const text = lines.join("   •   ");
-
-      const el = document.getElementById("headline-text");
+      const text = lines.join('   •   ');
+      const el = document.getElementById('headline-text');
       el.textContent = text;
-
       startScrollLoop(el);
     });
 }
 
-function startScrollLoop(el) {
-  function loop() {
-    el.classList.add("scroll");
-
-    setTimeout(() => {
-      el.classList.remove("scroll");
-      void el.offsetWidth;
-      setTimeout(loop, 500);
-    }, 30000);
-  }
-  loop();
-}
-
-//////////////////////////////////////////////////
-// PROJECTS
-//////////////////////////////////////////////////
-let fullRows = [];
-let rowPage = 0;
+/* ================================
+   PROJECTS (FROM GSHEET)
+================================= */
+let fullRows = [], rowPage = 0;
 
 function loadTasks() {
-  fetch(API.projects)
+  fetch(API.tasks)
     .then(res => res.json())
     .then(data => {
 
       const rows = Array.isArray(data) ? data : Object.values(data);
 
       fullRows = rows.map((item, i) => {
+
         const brand = (item.brand || "").toLowerCase();
+        const accomplishment = item.accomplishment || 0;
 
         return `
           <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
             <div class="col-number">${i + 1}</div>
-            <div class="col-project">${item.project || ""}</div>
-            <div class="col-sub">${item.sub || ""}</div>
-            <div class="col-head">${item.head || ""}</div>
+            <div class="col-project">${item.project || ''}</div>
+            <div class="col-sub">${item.sub || ''}</div>
+            <div class="col-head">${item.head || ''}</div>
+
             <div class="col-brand">
               <img src="brands/${brand}.svg" class="brand-logo">
             </div>
-            <div class="col-start">${item.start || ""}</div>
-            <div class="col-deadline">${item.deadline || ""}</div>
-            <div class="col-remarks">${item.remarks || ""}</div>
-            <div class="col-accomplishment">${item.accomplishment || 0}%</div>
-            <div class="col-status">${item.status || ""}</div>
+
+            <div class="col-start">${item.start || ''}</div>
+            <div class="col-deadline">${item.deadline || ''}</div>
+            <div class="col-remarks">${item.remarks || ''}</div>
+
+            <div class="col-accomplishment">
+              <div>${accomplishment}%</div>
+              <div class="progress-container">
+                <div class="progress-segment"></div>
+                <div class="progress-segment"></div>
+                <div class="progress-segment"></div>
+                <div class="progress-segment"></div>
+              </div>
+            </div>
+
+            <div class="col-status">${item.status || ''}</div>
           </div>
         `;
       });
@@ -155,20 +472,11 @@ function loadTasks() {
     });
 }
 
-function switchRows() {
-  const container = document.getElementById("data-rows");
-
-  if (!fullRows.length) return;
-
-  container.innerHTML = fullRows.slice(rowPage * 10, (rowPage + 1) * 10).join('');
-  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
-}
-
-//////////////////////////////////////////////////
-// PAGE SPACE (FB + IG)
-//////////////////////////////////////////////////
+/* ================================
+   FB + IG MERGED DISPLAY
+================================= */
 let pages = [];
-let pageIndex = 0;
+let pageBatchIndex = 0;
 
 function loadPageSpace() {
 
@@ -178,75 +486,79 @@ function loadPageSpace() {
   ])
   .then(([fbData, igData]) => {
 
-    pages = Object.keys(fbData).map(brand => {
+    const brands = Object.keys(fbData);
 
-      const fb = Number(fbData[brand] || 0).toLocaleString();
-      const ig = Number(igData[brand] || 0).toLocaleString();
+    pages = brands.map(brand => {
+
+      const fb = fbData[brand] || {};
+      const ig = igData[brand] || {};
+
+      const fbVal = Number(fb.value || fb).toLocaleString();
+      const igVal = Number(ig.value || ig).toLocaleString();
+
+      const fbDiff = Number(fb.diff || 0);
+      const igDiff = Number(ig.diff || 0);
+
+      function getIndicator(diff){
+        if(diff > 0) return '<span style="color:green;">▲</span>';
+        if(diff < 0) return '<span style="color:red;">▼</span>';
+        return '<span style="display:inline-block;width:12px;height:8px;background:black;border-radius:2px;"></span>';
+      }
 
       return `
-        <div style="width:20%;text-align:center;color:black;">
-          <img src="brands/${brand}_on_white.svg" style="max-height:50px;"><br>
-          FB: ${fb}<br>
-          IG: ${ig}
+        <div class="white-ticker-item">
+          <div class="white-ticker-item-left">
+            <img src="brands/${brand.toLowerCase()}_on_white.svg" class="ticker-brand-logo">
+          </div>
+          <div class="white-ticker-item-right">
+            <div style="color:black;font-weight:bold;">
+              FB: ${fbVal} ${getIndicator(fbDiff)}
+            </div>
+            <div style="color:black;">
+              IG: ${igVal} ${getIndicator(igDiff)}
+            </div>
+          </div>
         </div>
       `;
     });
 
     updatePageSpace();
     setInterval(updatePageSpace, 10000);
-
   });
 }
 
+/* ================================
+   KEEP YOUR EXISTING FUNCTIONS
+================================= */
+function switchRows() {
+  const container = document.getElementById('data-rows');
+  container.innerHTML = fullRows.slice(rowPage * 10, (rowPage + 1) * 10).join('');
+  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
+}
+
 function updatePageSpace() {
-  const container = document.getElementById("pageSpace");
+  const pageSpace = document.getElementById('pageSpace');
+  const batch = pages.slice(pageBatchIndex, pageBatchIndex + 5);
 
-  if (!pages.length) return;
+  pageSpace.style.justifyContent = batch.length < 5 ? 'center' : 'space-between';
+  pageSpace.style.opacity = 0;
 
-  const batch = pages.slice(pageIndex, pageIndex + 5);
-  container.innerHTML = batch.join('');
+  setTimeout(() => {
+    pageSpace.innerHTML = batch.join('');
+    pageSpace.style.opacity = 1;
 
-  pageIndex += 5;
-  if (pageIndex >= pages.length) pageIndex = 0;
+    pageBatchIndex += 5;
+    if (pageBatchIndex >= pages.length) pageBatchIndex = 0;
+  }, 1000);
 }
 
-//////////////////////////////////////////////////
-// TIME
-//////////////////////////////////////////////////
-function updateDateTime() {
-  const now = new Date();
-
-  document.getElementById('week-text').textContent =
-    now.toLocaleDateString('en-US', { weekday: 'long' });
-
-  document.getElementById('date-text').textContent =
-    now.toLocaleDateString('en-US', { month: 'long', day: '2-digit' });
-
-  document.getElementById('year-text').textContent =
-    now.getFullYear();
-
-  let hours = now.getHours();
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-
-  hours = hours % 12 || 12;
-
-  document.getElementById('time-text').textContent =
-    `${hours}:${minutes}:${seconds} ${ampm}`;
-}
-
-//////////////////////////////////////////////////
-// INIT
-//////////////////////////////////////////////////
+/* ================================
+   INIT (UNCHANGED)
+================================= */
 loadHeadlines();
 loadTasks();
 loadPageSpace();
 
-updateDateTime();
-setInterval(updateDateTime, 1000);
-
 </script>
-
 </body>
 </html>

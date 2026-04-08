@@ -452,52 +452,49 @@ function startScrollLoop(element) {
 ================================= */
 let fullRows = [], rowPage = 0;
 
-function loadTasks() {
-  fetch(API.tasks)
-    .then(res => res.json())
-    .then(data => {
+function switchRows() {
+  const container = document.getElementById('data-rows');
 
-      const rows = Array.isArray(data) ? data : Object.values(data);
+  const start = rowPage * 10;
+  const pageRows = fullRows.slice(start, start + 10);
 
-      fullRows = rows.map((item, i) => {
+  container.innerHTML = pageRows.map((item, i) => {
 
-        const brand = (item.brand || "").toLowerCase();
-        const accomplishment = item.accomplishment || 0;
+    const globalIndex = start + i;
+    const brand = (item.brand || "").toLowerCase();
+    const accomplishment = item.accomplishment || 0;
+    const color = getProgressColor(accomplishment);
 
-        const color = getProgressColor(accomplishment);
+    return `
+      <div class="table-row ${globalIndex % 2 === 0 ? 'even' : 'odd'}">
+        <div class="col-number">${globalIndex + 1}</div>
+        <div class="col-project">${item.project || ''}</div>
+        <div class="col-sub">${item.sub || ''}</div>
+        <div class="col-head">${item.head || ''}</div>
 
-        return `
-          <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
-            <div class="col-number">${i + 1}</div>
-            <div class="col-project">${item.project || ''}</div>
-            <div class="col-sub">${item.sub || ''}</div>
-            <div class="col-head">${item.head || ''}</div>
+        <div class="col-brand">
+          <img src="brands/${brand}.svg" class="brand-logo">
+        </div>
 
-            <div class="col-brand">
-              <img src="brands/${brand}.svg" class="brand-logo">
+        <div class="col-start">${item.start || ''}</div>
+        <div class="col-deadline">${item.deadline || ''}</div>
+        <div class="col-remarks">${item.remarks || ''}</div>
+
+        <div class="col-accomplishment">
+          <div>${accomplishment}%</div>
+          <div class="progress-container">
+            <div class="progress-bar"
+              style="width:${accomplishment}%; background:${color}">
             </div>
-
-            <div class="col-start">${item.start || ''}</div>
-            <div class="col-deadline">${item.deadline || ''}</div>
-            <div class="col-remarks">${item.remarks || ''}</div>
-
-            <div class="col-accomplishment">
-              <div>${accomplishment}%</div>
-              <div class="progress-container">
-                <div class="progress-bar"
-                     style="width:${accomplishment}%; background:${color}">
-                </div>
-              </div>
-            </div>
-
-            <div class="col-status">${item.status || ''}</div>
           </div>
-        `;
-      });
+        </div>
 
-      switchRows();
-      setInterval(switchRows, 30000);
-    });
+        <div class="col-status">${item.status || ''}</div>
+      </div>
+    `;
+  }).join('');
+
+  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
 }
 
 /* ================================
@@ -549,14 +546,6 @@ function loadPageSpace() {
   });
 }
 
-/* ================================
-   KEEP YOUR EXISTING FUNCTIONS
-================================= */
-function switchRows() {
-  const container = document.getElementById('data-rows');
-  container.innerHTML = fullRows.slice(rowPage * 10, (rowPage + 1) * 10).join('');
-  rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
-}
 
 function updatePageSpace() {
   const pageSpace = document.getElementById('pageSpace');
@@ -578,7 +567,6 @@ function updatePageSpace() {
    INIT (UNCHANGED)
 ================================= */
 loadHeadlines();
-loadTasks();
 loadPageSpace();
 
 /* ================================

@@ -321,9 +321,7 @@ footer {
 audio { display: none; }
 </style>
 </head>
-
 <body>
-
 <header>MARKETING ONGOING PROJECTS</header>
 
 <div class="category-bar">
@@ -343,7 +341,7 @@ audio { display: none; }
 
 <footer>
   <div class="footer-top">
-    <div id="pageSpace" style="display:flex;"></div>
+    <div class="custom-box" id="pageSpace" style="display:flex;"></div>
   </div>
 
   <div class="footer-bottom">
@@ -351,7 +349,26 @@ audio { display: none; }
       <div class="headline-text" id="headline-text"></div>
     </div>
   </div>
+
+  <div class="name-time-box">
+      <div class="week-box">
+        <div id="week-text"></div>
+      </div>
+      <div class="date-box">
+        <div id="date-text"></div>
+      </div>
+      <div class="year-box">
+        <div id="year-text"></div>
+      </div>
+      <div class="time-box">
+        <div id="time-text"></div>
+      </div>
+    </div>
+
+    <img src="logo.png" alt="Logo" class="footer-logo">
 </footer>
+
+<audio id="bg-music" src="startup.mp3" autoplay loop preload="auto"></audio>
 
 <script>
 

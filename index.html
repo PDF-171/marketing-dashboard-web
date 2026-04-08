@@ -512,8 +512,8 @@ function loadPageSpace() {
 
     pages = brands.map(brand => {
 
-      const fbVal = Number(fbData[brand] || 0);
-      const igVal = Number(igData[brand] || 0);
+      const fbVal = fbData[brand] || { value: 0, difference: 0 };
+      const igVal = igData[brand] || { value: 0, difference: 0 };
 
       function getIndicator(diff){
         if(diff > 0) return '<span style="color:green;">▲</span>';
@@ -531,7 +531,7 @@ function loadPageSpace() {
               FB: ${fbVal.value} ${getIndicator(fbVal.difference)}
             </div>
             <div style="color:black;font-weight:bold;">
-              IG: ${igVal.value} ${getIndicator(igVal.difference)}
+              IG: ${igVal.value} ${getIndicator(igVal.difference)}  
             </div>
           </div>
         </div>

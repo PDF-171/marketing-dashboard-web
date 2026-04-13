@@ -13,17 +13,21 @@
       color: white;
       height: 100%;
       overflow: hidden;
+      dispaly: flex;
+      flex-direction: column;
     }
 
     header {
-      height: 10vh;
+      min-height: 70px;
+      padding: 10px;
       background: url('header.png') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: clamp(24px, 4vw, 64px);
+      font-size: clamp(18px, 3vw, 48px);
       font-weight: bold;
       color: white;
+      flex-shrink: 0;
     }
 
     .category-bar, .table-row {

@@ -32,28 +32,39 @@
       padding: 0 0.5rem;
     }
 
-    .category-bar {
-      height: 7vh;
-    }
-
     .table-row {
-      height: 6.3vh;
+      display: flex;
+      align-items: center;
+      min-height: 6vh;
+      flex-wrap: nowrap
     }
 
     .category-bar {
-      background-color: red;
-      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+      min-height: 7vh;
+      height: auto;
+      font-size: clamp(10px, 1.5vw, 18px);
     }
 
     .table-row.even { background-color: #848484; }
     .table-row.odd { background-color: #4f4f4f; }
 
 
-    .table-row div hover, .category-bar div hover {
+    .table-row div:hover, 
+    .category-bar div:hover {
       padding: 0 0.5rem;
       overflow: visible;
       white-space: normal;
       text-overflow: unset;
+    }
+
+    .table-row div,
+    .category-bar div {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     .scroll {animation: tickerScroll 30s linear forwards;}

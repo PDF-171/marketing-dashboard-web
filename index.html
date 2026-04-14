@@ -164,7 +164,6 @@
       height: 20vh;
       display: flex;
       flex-direction: row;
-      position: relative;
     }
 
     .footer-main {
@@ -401,27 +400,24 @@
   <div class="content" id="data-rows"></div>
 
   <footer>
-    <div class="footer-main">
-      <div class="footer-top">
-        <div class="custom-box" id="pageSpace"></div>
-      </div>
+    <div class="footer-left">
+      <img src="logo.png" class="footer-logo-fixed">
+    </div>
 
-      <div class="footer-bottom">
-        <div class="headline-box">
-          <div class="headline-text" id="headline-text"></div>
-        </div>
+    <div class="footer-center">
+      <div class="custom-box" id="pageSpace"></div>
+      <div class="headline-box">
+        <div class="headline-text" id="headline-text"></div>
       </div>
     </div>
 
-    <div class="footer-side">
-      <img src="logo.png" class="footer-logo-fixed">
-
-      <div class="time-wrapper">
-        <div id="week-text"></div>
-        <div id="date-text"></div>
-        <div id="year-text"></div>
-        <div id="time-text"></div>
-      </div>
+    <div class="footer-right">
+        <div class="time-wrapper">
+          <div id="week-text"></div>
+          <div id="date-text"></div>
+          <div id="year-text"></div>
+          <div id="time-text"></div>
+        </div>
     </div>
   </footer>
 

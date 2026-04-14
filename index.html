@@ -8,17 +8,18 @@
     html, body {
       margin: 0;
       padding: 0;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
       font-family: Arial, sans-serif;
       background-color: #1d1d1d;
       color: white;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
     }
 
     header {
       min-height: 70px;
+      flex: 0 0 70px;
       padding: 10px;
       background: url('header.png') center/cover no-repeat;
       display: flex;
@@ -155,12 +156,13 @@
     }
 
     .content {
-      height: 63vh;
+      flex: 1;
       overflow: hidden;
     }
 
     footer {
       height: 20vh;
+      position: relative;
       width: 100%;
       display: flex;
       flex-direction: column;

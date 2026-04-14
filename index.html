@@ -164,6 +164,24 @@
       height: 20vh;
       display: flex;
       flex-direction: row;
+      width: 100%;
+      border-top: 2px solid #333;
+    }
+
+    .footer-left {
+      width: 20%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+    }
+
+    .footer-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
     }
 
     .footer-main {
@@ -286,18 +304,13 @@
     }
 
     .custom-box {
-      position: absolute;
-      top: 80vh;
-      right: 12rem;
-      width: 71.17%;
       height: 12vh;
       background-color: white;
       display: flex;
-      flex-direction: row;
       align-items: center;
       justify-content: center;
-      overflow: hidden;
       transition: opacity 1s ease-in-out;
+      overflow: hidden;
     }
 
     .white-ticker-item {
@@ -335,25 +348,34 @@
     }
 
     .headline-box {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 8vh;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-        white-space: nowrap;
-        font-size: 2.5vh;
-        font-weight: bold;
-        z-index: 0;
-      }
+      bottom: 0;
+      height: 8vh;
+      width: 100%;
+      background-color: #e2cec3;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .footer-right{
+      width: 20vh;
+      background-color: red;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+    }
 
       .headline-text {
         display: inline-block;
         padding-left: 100%;
         color: black;
-        white-space: nowrap;
+        font-size: 2.5vh;
+        font-weight: bold;
       }
 
       .headline-text-wrapper {

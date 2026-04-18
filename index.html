@@ -181,7 +181,7 @@
     .footer-logo {
       position: absolute;
       left: 0rem;
-      top:80%;
+      bottom: 0rem;
       transform: translateY(0);
       height: 20vh;
       width: auto;
@@ -191,7 +191,7 @@
       position: absolute;
       z-index: 1;
       right:0rem;
-      top:80%;
+      bottom: 0rem;
       height: 20vh;
       width: 20vh;
       background-color: red;
@@ -389,20 +389,28 @@
 
   <footer>
     <div class="footer-top">
-      <div class="custom-box" id="pageSpace"></div>
+      <div class="custom-box" id="pageSpace" style="display:flex;"></div>
     </div>
 
     <div class="footer-bottom">
       <div class="headline-box">
-        <div class="headline-text"></div>
+        <div class="headline-text" id="headline-text"></div>
       </div>
     </div> 
 
     <div class="name-time-box">
-      <div id="week-text"></div>
-      <div id="date-text"></div>
-      <div id="year-text"></div>
-      <div id="time-text"></div>
+      <div class="week-box">
+        <div id="week-text"></div>
+      </div>
+      <div class="date-box">
+        <div id="date-text"></div>
+      </div>
+      <div class="year-box">
+        <div id="year-text"></div>
+      </div>
+      <div class="time-box">
+        <div id="time-text"></div>
+      </div>
     </div>
 
     <img src="logo.png" alt="Logo" class="footer-logo">

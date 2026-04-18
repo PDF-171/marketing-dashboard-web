@@ -1,291 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Marketing Dashboard</title>
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      background-color: #1d1d1d;
-      color: white;
-      height: 100%;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Marketing Dashboard</title>
 
-    header {
-      min-height: 70px;
-      padding: 10px;
-      background: #333 url('header.png') center/cover no-repeat;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: clamp(18px, 3vw, 48px);
-      font-weight: bold;
-      color: white;
-      flex-shrink: 0;
-    }
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1d1d1d;
+  color: white;
+  height: 100%;
+  overflow: hidden;
+  display: flex; /* FIXED TYPO */
+  flex-direction: column;
+}
 
-    .category-bar, .table-row {
-      display: flex;
-      align-items: center;
-      padding: 0 0.5rem;
-    }
+header {
+  min-height: 70px;
+  padding: 10px;
+  background: url('header.png') center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(18px, 3vw, 48px);
+  font-weight: bold;
+}
 
-    .table-row {
-      min-height: 6vh;
-      flex-wrap: nowrap;
-    }
+.category-bar, .table-row {
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem;
+}
 
-    .category-bar {
-      min-height: 7vh;
-      height: auto;
-      font-size: clamp(10px, 1.5vw, 18px);
-      background-color: #d32f2f;
-      color: white; 
-      font-weight: bold;
-    }
+.category-bar {
+  min-height: 7vh;
+  font-size: clamp(10px, 1.5vw, 18px);
+  background-color: red;
+  font-weight: bold;
+}
 
-    .table-row.even { background-color: #3a3a3a; }
-    .table-row.odd { background-color: #2a2a2a; }
+.table-row {
+  min-height: 6vh;
+}
 
-    .table-row div, .category-bar div {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      padding: 0 5px;
-    }
+.table-row.even { background-color: #848484; }
+.table-row.odd { background-color: #4f4f4f; }
 
-    /* Column Widths */
-    .col-number { width: 3%; }
-    .col-project, .col-sub, .col-head { width: 10%; }
-    .col-brand { width: 10%; text-align: center; }
-    .col-start, .col-deadline { width: 10%; text-align: center; }
-    .col-remarks { width: 17%; white-space: normal; line-height: 1.2; }
-    .col-accomplishment { width: 10%; }
-    .col-status { width: 10%; }
+.col-number { width: 3%; }
+.col-project, .col-sub, .col-head { width: 10%; }
+.col-brand { width: 10%; text-align: center; }
+.col-start, .col-deadline { width: 10%; text-align: center; }
+.col-remarks { width: 17%; }
+.col-accomplishment { width: 10%; }
+.col-status { width: 10%; }
 
-    .progress-container {
-      width: 100%;
-      height: 12px;
-      background-color: #444;
-      border-radius: 6px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
+.brand-logo {
+  height: 5vh;
+  object-fit: contain;
+}
 
-    .progress-bar {
-      height: 100%;
-      transition: width 0.5s ease;
-    }
+.content {
+  height: 63vh;
+  overflow: hidden;
+}
 
-    .brand-logo {
-      height: 4vh;
-      max-width: 100%;
-      object-fit: contain;
-    }
+footer {
+  height: 20vh;
+  position: relative;
+}
 
-    .content {
-      height: 63vh;
-      overflow: hidden;
-    }
+.footer-top {
+  height: 12vh;
+  background: white;
+}
 
-    footer {
-      height: 20vh;
-      width: 100%;
-      position: relative;
-      background-color: white;
-    }
+.footer-bottom {
+  height: 8vh;
+  background: #e2cec3;
+}
 
-    .footer-bottom {
-      position: absolute;
-      bottom: 0;
-      height: 8vh;
-      background-color: #e2cec3;
-      width: 100%;
-    }
+.name-time-box {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 20vh;
+  background: red;
+}
 
-    .name-time-box {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      height: 20vh;
-      width: 20vh;
-      background-color: #d32f2f;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 10;
-    }
+.headline-box {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
 
-    .name-time-box div { color: white; font-weight: bold; }
-    #week-text { font-size: 2.5vh; }
-    #date-text { font-size: 2vh; }
-    #time-text { font-size: 2.5vh; margin-top: 5px; }
+.headline-text {
+  white-space: nowrap;
+  animation: tickerScroll 30s linear infinite;
+}
 
-    .custom-box {
-      position: absolute;
-      left: 10%;
-      top: 0;
-      width: 70%;
-      height: 12vh;
-      display: flex;
-      align-items: center;
-      transition: opacity 1s ease;
-    }
-
-    .white-ticker-item {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      color: black;
-      font-size: 0.9rem;
-    }
-
-    .ticker-brand-logo { height: 50px; margin-right: 10px; }
-
-    .headline-box {
-      height: 100%;
-      display: flex;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .headline-text {
-      display: inline-block;
-      white-space: nowrap;
-      color: black;
-      font-weight: bold;
-      font-size: 2.5vh;
-      padding-left: 100%;
-    }
-
-    .scroll { animation: tickerScroll 30s linear infinite; }
-
-    @keyframes tickerScroll {
-      0%   { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
-    }
-  </style>
+@keyframes tickerScroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+</style>
 </head>
-<body>
-  <header>MARKETING ONGOING PROJECTS</header>
 
-  <div class="category-bar">
-    <div class="col-number">#</div>
-    <div class="col-project">Project</div>
-    <div class="col-sub">Sub Dept</div>
-    <div class="col-head">Head</div>
-    <div class="col-brand">Brand</div>
-    <div class="col-start">Start</div>
-    <div class="col-deadline">Deadline</div>
-    <div class="col-remarks">Remarks</div>
-    <div class="col-accomplishment">Progress</div>
-    <div class="col-status">Status</div>
+<body>
+
+<header>MARKETING ONGOING PROJECTS</header>
+
+<div class="category-bar">
+  <div class="col-number"></div>
+  <div class="col-project">Project</div>
+  <div class="col-sub">Sub Department</div>
+  <div class="col-head">Project Head</div>
+  <div class="col-brand">Brand</div>
+  <div class="col-start">Date Started</div>
+  <div class="col-deadline">Deadline</div>
+  <div class="col-remarks">Remarks</div>
+  <div class="col-accomplishment">Accomplishment</div>
+  <div class="col-status">Status</div>
+</div>
+
+<div class="content" id="data-rows"></div>
+
+<footer>
+  <div class="footer-top"></div>
+
+  <div class="footer-bottom">
+    <div class="headline-box">
+      <div class="headline-text" id="headline-text">Loading headlines...</div>
+    </div>
   </div>
 
-  <div class="content" id="data-rows"></div>
+  <div class="name-time-box">
+    <div id="time-text"></div>
+  </div>
+</footer>
 
-  <footer>
-    <div class="custom-box" id="pageSpace"></div>
-    <div class="footer-bottom">
-      <div class="headline-box">
-        <div class="headline-text" id="headline-text">Loading headlines...</div>
-      </div>
-    </div> 
+<script>
+const API = {
+  headlines: "https://script.google.com/macros/s/AKfycbyiUmwPn3edhoWsnv8PT8Z5sZcEY6xBZtRhEKDtUYzKGqfpUFAlWSVW7hlqJTxup9NO/exec",
+  tasks: "https://script.google.com/macros/s/AKfycbxNcL22qE5qHIln8atmXEE0BZv5x9l5A7S5FKzM1sFAZslZZTabdG8n0GRZhpABVNYg/exec"
+};
 
-    <div class="name-time-box">
-      <div id="week-text"></div>
-      <div id="date-text"></div>
-      <div id="year-text"></div>
-      <div id="time-text"></div>
-    </div>
-  </footer>
+/* HEADLINES */
+function loadHeadlines() {
+  fetch(API.headlines)
+    .then(res => res.json())
+    .then(data => {
+      const text = data.join(" • ");
+      document.getElementById("headline-text").textContent = text;
+    });
+}
 
-  <script>
-    const API = {
-      headlines: "https://script.google.com/macros/s/AKfycbyiUmwPn3edhoWsnv8PT8Z5sZcEY6xBZtRhEKDtUYzKGqfpUFAlWSVW7hlqJTxup9NO/exec",
-      tasks: "https://script.google.com/macros/s/AKfycbxNcL22qE5qHIln8atmXEE0BZv5x9l5A7S5FKzM1sFAZslZZTabdG8n0GRZhpABVNYg/exec",
-      fb: "https://script.google.com/macros/s/AKfycbzRJ9VcmN0GGeM4KTLNFTQT0GeJFGZkfxWqPmk0nKOXyjKoQpzvMI6Iv2y-0O157C1XIw/exec",
-      ig: "https://script.google.com/macros/s/AKfycbx3BRz2BkYde81Le3iQ_-ni6yj-_dKP_t8y3v7XvXsNOo-ASbSXZjnwg4plYm_PGihhkw/exec"
-    };
+/* TASKS */
+function loadTasks() {
+  fetch(API.tasks)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("data-rows");
 
-    let fullRows = [], rowPage = 0;
+      container.innerHTML = data.map((item, i) => `
+        <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
+          <div class="col-number">${i + 1}</div>
+          <div class="col-project">${item.project || ''}</div>
+          <div class="col-sub">${item.sub || ''}</div>
+          <div class="col-head">${item.head || ''}</div>
+          <div class="col-brand">
+            <img src="brands/${(item.brand || '').toLowerCase()}.svg" class="brand-logo">
+          </div>
+          <div class="col-start">${item.start || ''}</div>
+          <div class="col-deadline">${item.deadline || ''}</div>
+          <div class="col-remarks">${item.remarks || ''}</div>
+          <div class="col-accomplishment">${item.accomplishment || 0}%</div>
+          <div class="col-status">${item.status || ''}</div>
+        </div>
+      `).join('');
+    });
+}
 
-    function loadHeadlines() {
-      fetch(API.headlines).then(res => res.json()).then(data => {
-        const lines = Array.isArray(data) ? data : Object.values(data);
-        const el = document.getElementById('headline-text');
-        el.textContent = lines.join('   •   ');
-        el.classList.add('scroll');
-      });
-    }
+/* TIME */
+function updateTime() {
+  const now = new Date();
+  document.getElementById("time-text").textContent = now.toLocaleTimeString();
+}
 
-    function loadTasks() {
-      fetch(API.tasks).then(res => res.json()).then(data => {
-        fullRows = Array.isArray(data) ? data : Object.values(data);
-        switchRows();
-        setInterval(switchRows, 8000);
-      });
-    }
+setInterval(updateTime, 1000);
 
-    function switchRows() {
-      const container = document.getElementById('data-rows');
-      const start = rowPage * 10;
-      const pageRows = fullRows.slice(start, start + 10);
-      
-      container.innerHTML = pageRows.map((item, i) => {
-        const accomplishment = item.accomplishment || 0;
-        const color = getProgressColor(accomplishment);
-        return `
-          <div class="table-row ${i % 2 === 0 ? 'even' : 'odd'}">
-            <div class="col-number">${start + i + 1}</div>
-            <div class="col-project">${item.project || ''}</div>
-            <div class="col-sub">${item.sub || ''}</div>
-            <div class="col-head">${item.head || ''}</div>
-            <div class="col-brand"><img src="brands/${(item.brand || '').toLowerCase()}.svg" class="brand-logo" onerror="this.style.display='none'"></div>
-            <div class="col-start">${formatDate(item.start)}</div>
-            <div class="col-deadline">${formatDate(item.deadline)}</div>
-            <div class="col-remarks">${item.remarks || ''}</div>
-            <div class="col-accomplishment">
-              ${accomplishment}%
-              <div class="progress-container"><div class="progress-bar" style="width:${accomplishment}%; background:${color}"></div></div>
-            </div>
-            <div class="col-status">${item.status || ''}</div>
-          </div>`;
-      }).join('');
-      rowPage = (rowPage + 1) % Math.ceil(fullRows.length / 10);
-    }
+/* INIT */
+loadHeadlines();
+loadTasks();
+updateTime();
+</script>
 
-    function getProgressColor(p) {
-      if (p >= 100) return "#4caf50";
-      if (p >= 50) return "#ffeb3b";
-      return "#f44336";
-    }
-
-    function formatDate(d) {
-      if (!d) return "";
-      const date = new Date(d);
-      return isNaN(date) ? d : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-    }
-
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById("week-text").textContent = now.toLocaleDateString('en-US', { weekday: 'long' });
-      document.getElementById("date-text").textContent = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
-      document.getElementById("year-text").textContent = now.getFullYear();
-      document.getElementById("time-text").textContent = now.toLocaleTimeString();
-    }
-
-    setInterval(updateDateTime, 1000);
-    loadHeadlines();
-    loadTasks();
-    updateDateTime();
-  </script>
 </body>
 </html>

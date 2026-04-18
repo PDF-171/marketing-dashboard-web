@@ -565,6 +565,9 @@ function loadPageSpace() {
 
     updatePageSpace();
     setInterval(updatePageSpace, 10000);
+    setInterval(loadHeadlines, 30000); 
+    setInterval(loadTasks, 5000); 
+    setInterval(loadPageSpace, 10000
   });
 }
 

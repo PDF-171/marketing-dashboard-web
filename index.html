@@ -647,9 +647,12 @@ function loadTasks() {
       fullRows = Array.isArray(data) ? data : Object.values(data);
 
       rowPage = 0;
-      switchRows(); // FIRST RENDER
+      Rows(); // FIRST RENDER
 
-      setInterval(switchRows, 20000); // AUTO ROTATE PAGES
+      if (!rowIntervalStarted) {
+        setInterval(Rows, 20000);
+        rowIntervalStarted = true;
+      }
     });
 }
 

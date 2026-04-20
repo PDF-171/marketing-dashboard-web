@@ -349,10 +349,34 @@
 
 
     audio { display: none; }
+
+    #rotateBlock {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%
+      background: #1d1d1d;
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+      text-align: center;
+      font-size: 3vh;
+    }
+    
   </style>
 </head>
 <body>
-  <header>MARKETING ONGOING PROJECTS</header>
+
+<div id="rotateBlock">
+  <div class="message">
+    Please rotate your device to landscape 📱➡️
+  </div>
+</div>
+  
+<header>MARKETING ONGOING PROJECTS</header>
 
   <div class="category-bar">
     <div class="col-number"></div>
@@ -411,6 +435,17 @@ const API = {
   fb: "https://script.google.com/macros/s/AKfycbzRJ9VcmN0GGeM4KTLNFTQT0GeJFGZkfxWqPmk0nKOXyjKoQpzvMI6Iv2y-0O157C1XIw/exec",
   ig: "https://script.google.com/macros/s/AKfycbx3BRz2BkYde81Le3iQ_-ni6yj-_dKP_t8y3v7XvXsNOo-ASbSXZjnwg4plYm_PGihhkw/exec"
 };
+
+function checkOrientation() {
+  if (window.innerHeight > window.innerWidth) {
+    document.getElementById("rotateBlock").style.display = "flex";
+    return false;
+  } else {
+    document.getElementById("rotateBlock").style.display = "none";
+    return true;
+  }
+}
+  
 
 /* ================================
    HEADLINES (FROM GSHEET)
@@ -591,10 +626,20 @@ function updatePageSpace() {
 /* ================================
    INIT (UNCHANGED)
 ================================= */
-loadHeadlines();
-loadTasks();
-loadPageSpace();
+let appStarted = false;
 
+function startApp() {
+  if (!appStarted && checkOrientation()) {
+    loadHeadlines();
+    loadTasks();
+    loadPageSpace();
+    appStarted = true;
+  }
+}
+
+window.addEventListener("load", startApp);
+window.addEventListener("resize", startApp);
+  
 function loadTasks() {
   fetch(API.tasks)
     .then(res => res.json())

@@ -452,7 +452,7 @@ function startScrollLoop(element) {
 ================================= */
 let fullRows = [], rowPage = 0;
 
-function switchRows() {
+function Rows() {
   const container = document.getElementById('data-rows');
 
   const start = rowPage * 10;
@@ -564,10 +564,10 @@ function loadPageSpace() {
     });
 
     updatePageSpace();
-    setInterval(updatePageSpace, 10000);
+    setInterval(updatePageSpace, 15000);
     setInterval(loadHeadlines, 30000); 
-    setInterval(loadTasks, 200000); 
-    setInterval(loadPageSpace, 100000);
+    setInterval(loadTasks, 100000); 
+    setInterval(loadPageSpace, 75000);
   });
 }
 
@@ -604,7 +604,7 @@ function loadTasks() {
       rowPage = 0;
       switchRows(); // FIRST RENDER
 
-      setInterval(switchRows, 5000); // AUTO ROTATE PAGES
+      setInterval(switchRows, 20000); // AUTO ROTATE PAGES
     });
 }
 

@@ -422,7 +422,7 @@
     <img src="logo.png" alt="Logo" class="footer-logo">
   </footer>
 
-  <audio id="bg-music" src="startup.mp3" autoplay muted loop></audio>>
+  <audio id="-music" src="startup.mp3" autoplay muted loop></audio>>
 
 <script>
 
@@ -430,8 +430,12 @@
 window.addEventListener("click", () => {
   const audio = document.getElementById("bg-music");
   audio.muted = false;
-  audio.play();
-}); 
+
+  audio.play().catch(err => {
+    console.log("Playback failed:", err);
+  });
+}, { once: true });
+
 /* ================================
    API (REPLACES CSV)
 ================================= */

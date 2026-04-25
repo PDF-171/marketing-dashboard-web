@@ -422,20 +422,9 @@
     <img src="logo.png" alt="Logo" class="footer-logo">
   </footer>
 
-  <audio id="-music" src="startup.MP3" autoplay muted loop></audio>>
+  <audio id="bg-music" src="startup.MP3" autoplay loop preload="auto"></audio>
 
 <script>
-
-
-window.addEventListener("click", () => {
-  const audio = document.getElementById("bg-music");
-  audio.muted = false;
-
-  audio.play().catch(err => {
-    console.log("Playback failed:", err);
-  });
-}, { once: true });
-
 /* ================================
    API (REPLACES CSV)
 ================================= */

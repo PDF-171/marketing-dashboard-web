@@ -455,6 +455,9 @@ function checkOrientation() {
 /* ================================
    HEADLINES (FROM GSHEET)
 ================================= */
+
+let scrollLoopStarted = false;
+  
 function loadHeadlines() {
   fetch(API.headlines)
     .then(res => res.json())
@@ -463,7 +466,11 @@ function loadHeadlines() {
       const text = lines.join('   •   ');
       const el = document.getElementById('headline-text');
       el.textContent = text;
-      startScrollLoop(el);
+
+      if (!scrollLoopStarted) {
+        startScrollLoop(el); // only starts the loop once
+        scrollLoopStarted = true;
+      }
     })
     .catch(err => console.error('Failed to load headlines:', err));
 }
@@ -472,7 +479,7 @@ function startScrollLoop(element) {
   function scrollCycle() {
     // calculate duration based on text length
     // ~12ms per character is a good baseline speed
-    const duration = Math.max(10000, element.textContent.length * 12);
+    const duration = Math.max(10000, element.textContent.length * 20);
 
     element.style.animationDuration = duration + 'ms';
     element.classList.add('scroll');

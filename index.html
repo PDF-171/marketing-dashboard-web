@@ -56,7 +56,9 @@
       text-overflow: unset;
     }
 
-    .scroll {animation: tickerScroll 30s linear forwards;}
+    .scroll {
+  animation: tickerScroll linear forwards;
+}
     
     .col-number { width: 3%; }
     .col-project, .col-sub, .col-head { width: 10%; }
@@ -468,19 +470,18 @@ function loadHeadlines() {
 
 function startScrollLoop(element) {
   function scrollCycle() {
+    // calculate duration based on text length
+    // ~12ms per character is a good baseline speed
+    const duration = Math.max(10000, element.textContent.length * 12);
+
+    element.style.animationDuration = duration + 'ms';
     element.classList.add('scroll');
 
     setTimeout(() => {
       element.classList.remove('scroll');
-
-      // force reflow to restart animation
-      void element.offsetWidth;
-
-      setTimeout(() => {
-        scrollCycle();
-      }, 500);
-
-    }, 30000);
+      void element.offsetWidth; // force reflow
+      setTimeout(scrollCycle, 500);
+    }, duration);
   }
 
   scrollCycle();

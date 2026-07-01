@@ -374,6 +374,18 @@
     }
 
     @media screen and (max-width: 1366px) {
+
+  /* Hide elements not needed on mobile */
+  .name-time-box { display: none; }
+  .footer-logo { display: none; }
+
+  /* Remove the padding reserved for them */
+  .custom-box {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* Scale the whole page down */
   body {
     transform-origin: top left;
     transform: scale(0.55);

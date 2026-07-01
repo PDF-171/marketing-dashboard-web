@@ -477,16 +477,16 @@ function loadHeadlines() {
 
 function startScrollLoop(element) {
   function scrollCycle() {
-    // calculate duration based on text length
-    // ~12ms per character is a good baseline speed
-    const duration = Math.max(10000, element.textContent.length * 120);
+    const textWidth = element.scrollWidth;
+    const speed = 100; // pixels per second — adjust this instead
+    const duration = (textWidth / speed) * 1000;
 
     element.style.animationDuration = duration + 'ms';
     element.classList.add('scroll');
 
     setTimeout(() => {
       element.classList.remove('scroll');
-      void element.offsetWidth; // force reflow
+      void element.offsetWidth;
       setTimeout(scrollCycle, 500);
     }, duration);
   }

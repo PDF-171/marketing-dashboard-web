@@ -478,7 +478,7 @@ function loadHeadlines() {
 function startScrollLoop(element) {
   function scrollCycle() {
     const textWidth = element.scrollWidth;
-    const speed = 100; // pixels per second — adjust this instead
+    const speed = 150; // pixels per second — adjust this instead
     const duration = (textWidth / speed) * 1000;
 
     element.style.animationDuration = duration + 'ms';

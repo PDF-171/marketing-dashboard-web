@@ -479,7 +479,7 @@ function startScrollLoop(element) {
   function scrollCycle() {
     // calculate duration based on text length
     // ~12ms per character is a good baseline speed
-    const duration = Math.max(10000, element.textContent.length * 20);
+    const duration = Math.max(10000, element.textContent.length * 60);
 
     element.style.animationDuration = duration + 'ms';
     element.classList.add('scroll');
